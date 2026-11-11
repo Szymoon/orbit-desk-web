@@ -42,5 +42,5 @@ window.ORBIT_CONFIG = {
   ],
 
   // Optional: where the "Orbit Desk" logo links, e.g. your GitHub repository.
-  site: { repo_url: "" },
+  site: { repo_url: "https://szymoon.github.io/orbit-desk-web/" },
 };
