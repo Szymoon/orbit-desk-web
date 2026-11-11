@@ -273,3 +273,7 @@ screenshots/         images for this README
 - [Barlow](https://github.com/jpt/barlow) and [IBM Plex Mono](https://github.com/IBM/plex) fonts (SIL Open Font License). Their licenses are in `docs/fonts/`.
 
 Orbit Desk is a personal project and is not affiliated with NASA, NOAA or JPL.
+
+## License
+
+MIT. See [LICENSE](LICENSE). The bundled libraries and fonts keep their own licenses, listed above.
