@@ -1,0 +1,142 @@
+# Orbit Desk settings for the Raspberry Pi server. (The website uses docs/config.js.)
+# Anything left out uses the default. Every key is explained in config.example.toml.
+
+[location]
+name = "Kraków"
+short = "KRK"            # label for the clock in the status bar
+lat = 50.0614
+lon = 19.9366
+elevation_m = 220
+timezone = "Europe/Warsaw"
+
+[nasa]
+# Don't put your key here if this repo is public. On the Pi, put it in
+# config.local.toml (git-ignored) instead:
+#   [nasa]
+#   api_key = "your key"
+# Free key: https://api.nasa.gov. Without one, DEMO_KEY is used (slower refresh).
+api_key = "DEMO_KEY"
+
+[aurora]
+# Kp usually needed to see aurora from your latitude. About 7 for southern Poland.
+kp_threshold = 7
+
+[iss]
+# Embeddable live Earth-view stream, shown by "Watch Earth live". Examples:
+#   https://www.youtube.com/embed/live_stream?channel=CHANNEL_ID&autoplay=1&mute=1
+#   https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1
+stream_url = "https://www.youtube.com/embed/M3HKLzjvKPc?autoplay=1&mute=1"
+
+[gallery]
+queries = ["Webb nebula", "Webb galaxy", "Webb NIRCam", "Webb MIRI"]
+rotate_minutes = 15
+
+[server]
+host = "localhost"   # use "0.0.0.0" to open the panel from your laptop too
+port = 8321
+data_dir = "data"
+
+# Seconds between refreshes. Defaults are gentle on the public services.
+[intervals]
+# swpc = 120
+# dsn = 10
+
+[radio]
+
+[[radio.stations]]
+id = "gb"
+country = "United Kingdom"
+countrycode = "GB"
+tz = "Europe/London"
+name = "BBC Radio 2"
+search = "BBC Radio 2"
+
+[[radio.stations]]
+id = "jp"
+country = "Japan"
+countrycode = "JP"
+tz = "Asia/Tokyo"
+name = "Shonan Beach FM"
+search = "Shonan Beach FM"
+
+[[radio.stations]]
+id = "jp2"
+country = "Japan 2"
+countrycode = "JP"
+tz = "Asia/Tokyo"
+name = "R/a/dio"
+search = "r/a/dio"
+
+[[radio.stations]]
+id = "us"
+country = "USA"
+countrycode = "US"
+tz = "America/Los_Angeles"
+name = "KEXP"
+search = "KEXP"
+
+[[radio.stations]]
+id = "can"
+country = "Canada"
+countrycode = "CA"
+tz = "America/Edmonton"
+name = "CKUA Radio Network"
+search = "CKUA Radio Network"
+
+[[radio.stations]]
+id = "nl"
+country = "Netherlands"
+countrycode = "NL"
+tz = "Europe/Amsterdam"
+name = "NPO Radio 2"
+search = "NPO Radio 2"
+
+[[radio.stations]]
+id = "is"
+country = "Iceland"
+countrycode = "IS"
+tz = "Atlantic/Reykjavik"
+name = "Bylgjan"
+search = "Bylgjan"
+
+[[radio.stations]]
+id = "aus"
+country = "Australia"
+countrycode = "AU"
+tz = "Australia/Sydney"
+name = "Double J"
+search = "Double J"
+
+[[themes]]
+id = "solar"
+
+[[themes]]
+id = "martian"
+name = "Martian Dust"
+bg = "#140C08"
+panel = "#1F130C"
+line = "#3B2416"
+text = "#F4E4D4"
+muted = "#A88468"
+accent = "#FF4500"
+accent2 = "#EAB308"
+warn = "#EAB308"
+crit = "#FF6B4A"
+good = "#EAB308"
+land = "#2B1A10"
+
+[[themes]]
+id = "night"
+name = "Observatory"
+bg = "#000000"
+panel = "#0B0B0D"
+line = "#1F1F24"
+text = "#E6E6E6"
+muted = "#8A8A92"
+accent = "#B35F00"
+accent2 = "#0B8069"
+warn = "#D98A1A"
+crit = "#D9483B"
+good = "#0B8069"
+land = "#141418"
+image_filter = "none"

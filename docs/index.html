@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbit Desk</title>
+<meta name="description" content="A live space dashboard: space weather, the ISS, NASA's Deep Space Network, the planets and Webb pictures, on one 1024×600 panel.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Orbit Desk">
+<meta property="og:description" content="Live space weather, ISS, Deep Space Network, planets and Webb pictures on one panel.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="stage" id="stage" data-skin="night">
+  <header class="sbar">
+    <a class="brand" id="brand">Orbit <b>Desk</b></a>
+    <div class="scr-name" id="scrName">Overview</div>
+    <div class="spacer"></div>
+    <button class="alert" id="alert" hidden><i></i><span id="alertText"></span></button>
+    <button class="onair" id="onAir" hidden><i></i><span id="onAirName"></span></button>
+    <div class="health" id="health" title="Feed status"></div>
+    <button class="minbtn" id="minBtn" aria-label="Minimize the panel" title="Minimize"><svg viewBox="0 0 24 24"><path d="M5 17h14"/></svg></button>
+    <div class="clocks"><div><span id="cLocalLbl">LOC</span> <b id="cLocal">--:--</b></div><div><span>UTC</span> <b id="cUtc">--:--</b></div></div>
+  </header>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section class="screen" id="home" data-name="Overview">
+      <div class="tile tap" id="t-iss" data-go="iss">
+        <div class="lbl">ISS ground track <span class="src live">live</span></div>
+        <svg class="chart" id="issMini" viewBox="0 0 360 180" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="row small"><span class="muted" id="issMiniTxt">--</span><span class="muted" id="issMiniPass"></span></div>
+      </div>
+      <div class="tile" id="t-apollo">
+        <div class="lbl">Apollo 11 · July 1969 <span class="muted" id="apStep" style="letter-spacing:0"></span></div>
+        <div class="apphase" id="apPhase">–</div>
+        <canvas id="apCv"></canvas>
+        <div class="row" style="align-items:baseline"><span class="mid" id="apGet">T+ 000:00:00</span><span class="src" id="apSpeed" title="Replay speed">×1</span></div>
+        <div class="muted small" id="apUtc">&nbsp;</div>
+        <div class="small apnext" id="apNextEv">&nbsp;</div>
+        <div class="apctl">
+          <button class="abtn" id="apBack" aria-label="Previous phase">‹</button>
+          <button class="abtn wide" id="apPlay">Pause</button>
+          <button class="abtn" id="apFwd" aria-label="Next phase">›</button>
+        </div>
+      </div>
+      <div class="tile tap" id="t-kp" data-go="sun">
+        <div class="lbl">Geomagnetic <span class="src" id="kpAge">--</span></div>
+        <div class="row" style="align-items:center"><span class="big" id="hKp">Kp –</span><span class="chip" id="hG" hidden></span></div>
+        <div class="muted small" id="hKpText">&nbsp;</div>
+        <div class="bars" id="kpMini"></div>
+      </div>
+      <div class="tile tap" id="t-wind" data-go="sun">
+        <div class="lbl">Solar wind <span class="src" id="windAge">--</span></div>
+        <div class="big" id="hSpeed">–<span class="unit">km/s</span></div>
+        <dl class="kv" style="margin-top:auto">
+          <dt>Density</dt><dd id="hDens">–</dd>
+          <dt>Bz</dt><dd id="hBz">–</dd>
+        </dl>
+      </div>
+      <div class="tile" id="t-clock">
+        <div class="lbl"><span id="locName">Home</span> <span class="src live">live</span></div>
+        <div class="big" id="bigClock">--:--</div>
+        <div class="muted small" id="bigDate"></div>
+        <dl class="kv" style="margin-top:auto"><dt>Curiosity</dt><dd id="solHome">Sol ----</dd></dl>
+      </div>
+      <div class="tile" id="t-moon">
+        <div class="lbl">Moon <span class="src live">live</span></div>
+        <div class="moonrow">
+          <canvas id="moonCv" width="160" height="160"></canvas>
+          <div><div class="mid" id="moonPct">--%</div><div class="muted small" id="moonName">--</div></div>
+        </div>
+      </div>
+      <div class="tile tap" id="t-worlds" data-go="worlds">
+        <div class="lbl">Other worlds <span class="src live">live</span></div>
+        <dl class="kv" style="margin-top:auto">
+          <dt>Venus surface</dt><dd>464 °C</dd>
+          <dt>Light to Mars</dt><dd id="ltMars">-- min</dd>
+          <dt id="hMarsLbl">Mars, Gale crater</dt><dd id="hMars">–</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- SPACE WEATHER -->
+    <section class="screen" id="sun" data-name="Space weather" hidden>
+      <div class="tile suntile" id="t-sun">
+        <div class="lbl">Sun · 304 Å <span class="src" id="sunAge">--</span></div>
+        <div class="sunwrap"><img id="sunImg" alt="Latest image of the Sun at 304 ångström"></div>
+        <div class="row"><span class="muted small">Largest flare, 24 h</span><span class="mid" id="hFlare">–</span></div>
+      </div>
+      <div class="tile xr">
+        <div class="lbl">GOES X-ray flux, last 24 h <span class="src" id="xrAge">--</span></div>
+        <svg class="chart" id="xray" viewBox="0 0 640 230" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="tile kp">
+        <div class="lbl">Kp index, past day and forecast <span class="src" id="kpAge2">--</span></div>
+        <svg class="chart" id="kpChart" viewBox="0 0 640 170" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="side">
+        <div class="tile">
+          <div class="lbl" style="justify-content:flex-start;gap:5px">Aurora over <span id="auroraWhere">home</span></div>
+          <div class="verdict" id="auroraVerdict">–</div>
+          <p class="muted small" id="auroraText" style="margin:0;line-height:1.4"></p>
+        </div>
+        <div class="tile">
+          <div class="lbl">Solar wind, 1 h mean <span class="src" id="windSrc">--</span></div>
+          <dl class="kv" style="margin-top:6px">
+            <dt>Speed</dt><dd id="wSpeed">–</dd>
+            <dt>Density</dt><dd id="wDens">–</dd>
+            <dt>Bt / Bz</dt><dd id="wB">–</dd>
+            <dt>Sun to Earth at this speed</dt><dd id="wTravel">–</dd>
+          </dl>
+        </div>
+        <div class="tile events">
+          <div class="lbl">Latest event <span class="src" id="donkiAge">DONKI</span></div>
+          <div id="donkiList" class="evlist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OTHER WORLDS -->
+    <section class="screen" id="worlds" data-name="Other worlds" hidden>
+      <div class="tile">
+        <div class="lbl">Where everything is today <span class="src live">computed here</span></div>
+        <canvas id="orrery" width="820" height="820"></canvas>
+      </div>
+      <div class="cards" id="wcards"></div>
+    </section>
+
+    <!-- ISS -->
+    <section class="screen" id="iss" data-name="Space station" hidden>
+      <div class="tile map">
+        <div class="lbl">Ground track, one orbit back and ahead <span class="src" id="tleAge">--</span></div>
+        <svg class="chart" id="issMap" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="tile">
+        <div class="lbl">Right now</div>
+        <dl class="kv" style="margin-top:8px">
+          <dt>Latitude</dt><dd id="issLat">–</dd>
+          <dt>Longitude</dt><dd id="issLon">–</dd>
+          <dt>Altitude</dt><dd id="issAlt">–</dd>
+          <dt>Speed</dt><dd id="issSpeed">–</dd>
+          <dt>Sunlit</dt><dd id="issSun">–</dd>
+          <dt>From you</dt><dd id="issHome">–</dd>
+        </dl>
+        <div class="lbl" style="margin-top:12px">Next passes</div>
+        <div id="passes" class="passes"></div>
+      </div>
+      <button class="btn solid" id="liveBtn">Watch Earth live</button>
+    </section>
+
+    <!-- DSN -->
+    <section class="screen" id="dsn" data-name="Deep Space Network" hidden></section>
+
+    <!-- GALLERY -->
+    <section class="screen" id="gallery" data-name="Gallery" hidden>
+      <div class="tile img"><img id="galImg" alt=""></div>
+      <div class="tile">
+        <div class="lbl"><span id="galKind">Webb · random pick</span> <span class="src" id="galDate">--</span></div>
+        <h3 class="galtitle" id="galTitle">–</h3>
+        <p class="muted small galtext" id="galText"></p>
+        <div class="muted small" id="galCredit"></div>
+        <div class="galbtns">
+          <button class="btn" id="nextImg">Next Webb image</button>
+          <button class="btn" id="apodBtn">Picture of the day</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RADIO -->
+    <section class="screen" id="radio" data-name="World radio" hidden>
+      <div class="tile rlist">
+        <div class="lbl">Countries <span class="src" id="radioAge">--</span></div>
+        <div id="radioList" class="rrows"></div>
+      </div>
+      <div class="tile rnow">
+        <div class="lbl"><span id="rCountry">–</span> <span class="src" id="rStream">--</span></div>
+        <div class="rtime"><span class="big" id="rTime">--:--</span><span class="muted" id="rDay"></span></div>
+        <div class="rstation" id="rStation">–</div>
+        <div class="rsong">
+          <div class="muted small" id="rSongLbl">Now playing</div>
+          <div class="rartist" id="rArtist">&nbsp;</div>
+          <div class="rtitle" id="rTitle">&nbsp;</div>
+        </div>
+        <div class="rctl">
+          <button class="btn solid" id="rToggle">Unmute</button>
+          <span class="muted small" id="rState">Muted</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISPLAY SETTINGS -->
+    <section class="screen" id="settings" data-name="Display" hidden>
+      <div class="tile">
+        <div class="lbl">Look</div>
+        <div class="opts" id="skins"></div>
+        <p class="muted small" id="lookNote" style="margin:10px 0 0;line-height:1.4">Themes are set in config.toml under [[themes]].</p>
+      </div>
+      <div class="tile">
+        <div class="lbl">Overview tiles</div>
+        <div class="opts two" id="tiles"></div>
+      </div>
+      <div class="tile">
+        <div class="lbl">Ambient mode</div>
+        <div class="opts" id="cycle"></div>
+        <p class="muted small" style="margin:10px 0 0;line-height:1.4">Rotates through screens when nobody touches the panel. New alerts jump to Space weather.</p>
+        <div class="feeds" id="feedList"></div>
+      </div>
+    </section>
+
+    <div class="overlay" id="live" hidden>
+      <iframe id="liveFrame" title="ISS live Earth view" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen hidden></iframe>
+      <canvas id="earthCv" width="1000" height="498"></canvas>
+      <div class="ovbar"><span class="rec"><i></i>ISS · live Earth view</span><button class="btn" id="liveClose">Close</button></div>
+      <div class="ovnote" id="liveNote">No stream set yet. Add an embeddable live-stream URL as <code>iss.stream_url</code> in config.toml.</div>
+    </div>
+  </main>
+
+  <nav class="dock" id="dock"></nav>
+</div>
+<script src="config.js"></script>
+<script src="web.js"></script>
+<script src="vendor/hls.light.min.js"></script>
+<script src="vendor/satellite.min.js"></script>
+<script src="world.js"></script>
+<script src="apollo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Private settings (NASA key etc.)
+config.local.toml
+.env
+
+# Pi server: feed cache and downloaded pictures
+data/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
