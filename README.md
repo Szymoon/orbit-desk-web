@@ -9,6 +9,7 @@ A plain static website: no build step, no API keys, no backend. It also runs on 
 ![Static site](https://img.shields.io/badge/website-plain%20HTML%2FJS-F5A524)
 ![No API keys](https://img.shields.io/badge/API%20keys-none-45D0B0)
 ![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-optional-C51A4A?logo=raspberrypi&logoColor=white)
+[![Built with Claude Code <3](https://img.shields.io/badge/built%20with-Claude%20Code-D97757?logo=claude&logoColor=white)](https://claude.com/claude-code)
 
 <img src="screenshots/home.png" alt="Orbit Desk overview: ISS ground track on a world map, an Apollo 11 mission replay, Kp index, solar wind, clock, Moon phase and other worlds" width="900">
 
@@ -271,6 +272,7 @@ screenshots/         images for this README
 - Coastlines from [Natural Earth](https://www.naturalearthdata.com/) (public domain).
 - [satellite.js](https://github.com/shashwatak/satellite-js) (MIT) and [hls.js](https://github.com/video-dev/hls.js) (Apache-2.0). Their licenses are in `docs/vendor/`.
 - [Barlow](https://github.com/jpt/barlow) and [IBM Plex Mono](https://github.com/IBM/plex) fonts (SIL Open Font License). Their licenses are in `docs/fonts/`.
+- Designed and built together with [Claude Code](https://claude.com/claude-code), Anthropic's AI coding assistant.
 
 Orbit Desk is a personal project and is not affiliated with NASA, NOAA or JPL.
 
